@@ -30,6 +30,7 @@
 
   /* ── 初期設定ウィザード ── */
   .setup-modal { max-width: 720px; height: auto; max-height: 90vh; }
+  .license-modal { max-width: 520px; height: auto; }
   .setup-intro { font-size: 13px; color: #555; line-height: 1.7; margin-bottom: 14px; }
   .setup-env {
     background: #f5f8fc; border: 1px solid #e1ebf7; border-radius: 8px;
@@ -571,6 +572,27 @@
     </div>
   </div>
 
+</div>
+
+<!-- ライセンス有効化（未有効化時に表示・閉じられない） -->
+<div class="modal-overlay" id="license-overlay">
+  <div class="modal license-modal">
+    <div class="modal-header">
+      <h2>🔑 ライセンスの有効化</h2>
+    </div>
+    <div>
+      <p class="setup-intro">
+        ご利用にはライセンスキーが必要です。ご購入時にお渡しした
+        <b>ライセンスキー</b>を貼り付けて「有効化」を押してください。
+      </p>
+      <textarea id="license-key" rows="4" placeholder="ライセンスキーをここに貼り付け"
+        style="width:100%;font-family:monospace;font-size:12px"></textarea>
+      <div class="setup-msg" id="license-msg"></div>
+      <div style="margin-top:12px;text-align:right">
+        <button class="btn btn-primary" id="btn-activate" onclick="activateLicense()">有効化する</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- 初期設定ウィザード -->
@@ -1196,8 +1218,48 @@ async function verifyProvider(p, btn, msg) {
   }
 }
 
-// 起動時の初期化
-initSettings();
+// ───────────── ライセンス ─────────────
+async function initLicense() {
+  try {
+    const data = await (await fetch('/api/license/status')).json();
+    if (data.licensed) {
+      document.getElementById('license-overlay').classList.remove('show');
+      return true;
+    }
+  } catch(e) { /* 取得失敗時も有効化画面を出す */ }
+  document.getElementById('license-overlay').classList.add('show');
+  return false;
+}
+
+async function activateLicense() {
+  const key = document.getElementById('license-key').value.trim();
+  const msg = document.getElementById('license-msg');
+  const btn = document.getElementById('btn-activate');
+  if (!key) { msg.textContent = 'ライセンスキーを入力してください。'; return; }
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>確認中...';
+  try {
+    const res = await fetch('/api/license/activate', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ key })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || '有効化に失敗しました');
+    msg.textContent = '';
+    document.getElementById('license-overlay').classList.remove('show');
+    // 有効化後に通常の初期化を実行
+    initSettings();
+  } catch(e) {
+    msg.textContent = '❌ ' + e.message;
+  } finally {
+    btn.disabled = false; btn.textContent = '有効化する';
+  }
+}
+
+// 起動時の初期化：ライセンス確認 → OKならAI設定を読み込む
+(async () => {
+  const ok = await initLicense();
+  if (ok) initSettings();
+})();
 </script>
 </body>
 </html>

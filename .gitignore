@@ -6,3 +6,9 @@ __pycache__/
 # PyInstaller ビルド成果物
 build/
 dist/
+
+# ライセンス秘密鍵（販売者のみ保管・絶対にコミットしない）
+license_private_key.txt
+
+# 有効化済みライセンス（実行時に生成されるユーザーデータ）
+license.key
