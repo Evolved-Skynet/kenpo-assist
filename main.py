@@ -2,6 +2,7 @@ import os
 import shutil
 import sqlite3
 import subprocess
+import tempfile
 from datetime import datetime
 from contextlib import asynccontextmanager
 
@@ -200,7 +201,9 @@ PROVIDERS = {
     "claude": {
         "label": "Claude",
         "executable": "claude",
-        "build_cmd": lambda prompt: ["claude", "-p", prompt],
+        # --safe-mode で周辺設定（CLAUDE.md・スキル・フック・MCP等）を無効化し、
+        # 実行マシンの設定が回答に混入しないようにする（サブスク認証は維持される）。
+        "build_cmd": lambda prompt: ["claude", "-p", "--safe-mode", prompt],
     },
     "chatgpt": {
         "label": "ChatGPT",
@@ -218,6 +221,10 @@ DEFAULT_PROVIDER = os.getenv("DEFAULT_AI_PROVIDER", "claude")
 
 AI_TIMEOUT = int(os.getenv("AI_TIMEOUT", "120"))
 
+# CLIは作業ディレクトリの設定ファイル（CLAUDE.md / AGENTS.md / GEMINI.md 等）を
+# 自動探索することがある。中立な空ディレクトリで実行し、周辺設定の混入を防ぐ。
+AI_CWD = tempfile.mkdtemp(prefix="kenpo_ai_")
+
 
 def resolve_provider(requested: str = None) -> str:
     """リクエスト指定 → 保存設定 → 既定 の順でプロバイダを決定する"""
@@ -233,7 +240,7 @@ def call_ai(prompt: str, provider: str = None) -> str:
     cmd = conf["build_cmd"](prompt)
     try:
         result = subprocess.run(
-            cmd, capture_output=True, text=True, timeout=AI_TIMEOUT
+            cmd, capture_output=True, text=True, timeout=AI_TIMEOUT, cwd=AI_CWD
         )
     except FileNotFoundError:
         raise RuntimeError(
