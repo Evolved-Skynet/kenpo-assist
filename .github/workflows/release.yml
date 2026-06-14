@@ -19,9 +19,6 @@ jobs:
           - os: windows-latest
             built: dist/KenpoAssist.exe
             asset: KenpoAssist-windows.exe
-          - os: macos-latest
-            built: dist/KenpoAssist
-            asset: KenpoAssist-macos
           - os: ubuntu-latest
             built: dist/KenpoAssist
             asset: KenpoAssist-linux

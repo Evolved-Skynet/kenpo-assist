@@ -180,7 +180,7 @@
         <a href="#trial" class="btn">14日間 無料でお試し</a>
         <a href="#features" class="btn ghost">特長を見る</a>
       </div>
-      <p class="hero-note">無料お試し14日間（キー入力不要）／買い切り・席単位ライセンス／Windows・macOS対応／クラウド不要のローカル動作</p>
+      <p class="hero-note">無料お試し14日間（キー入力不要）／買い切り・席単位ライセンス／Windows対応／クラウド不要のローカル動作</p>
     </div>
     <div>
       <div class="mock">
@@ -328,7 +328,6 @@
       <!-- TODO: 配布バイナリの置き場所に合わせてダウンロードURLを設定してください -->
       <div class="trial-dl">
         <a href="#" data-os="win" class="btn" onclick="return dlClick(event)">Windows版をダウンロード</a>
-        <a href="#" data-os="mac" class="btn ghost" onclick="return dlClick(event)">macOS版をダウンロード</a>
       </div>
       <p class="trial-note">
         お試し期間の終了後は、ご購入のライセンスキーを入力すれば引き続きご利用いただけます。<br>
@@ -350,7 +349,7 @@
       <ul class="price-list">
         <li><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>すべての機能をご利用いただけます</li>
         <li><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>月額・追加課金なしの買い切り</li>
-        <li><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Windows / macOS 対応</li>
+        <li><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Windows 対応</li>
         <li><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>複数名でご利用の場合は人数分のライセンス</li>
       </ul>
       <a href="#contact" class="btn" style="width:100%">購入について問い合わせる</a>
@@ -383,7 +382,7 @@
       <div class="ans">本製品は個人の通常利用を前提としています。複数名でご利用の場合は、担当者ごとに本製品をインストールし、各自のAIアカウントでご利用ください（席単位ライセンス）。</div></details>
 
     <details><summary>対応OSは何ですか？</summary>
-      <div class="ans">Windows および macOS に対応しています。インターネット接続が必要です。</div></details>
+      <div class="ans">Windows に対応しています。インターネット接続が必要です。</div></details>
 
     <details><summary>回答をそのまま送ってよいですか？</summary>
       <div class="ans">AIが作成するのはあくまで「草案」です。最終的な回答内容は、必ず担当者さまがご確認・ご判断のうえご利用ください。</div></details>
@@ -445,8 +444,7 @@
   // GitHub Releases の「latest」から配布バイナリをダウンロード
   // （リリースを1度作成すると有効になります。タグ push で自動公開）
   const DOWNLOAD_URLS = {
-    win: "https://github.com/Evolved-Skynet/kenpo-assist/releases/latest/download/KenpoAssist-windows.exe",
-    mac: "https://github.com/Evolved-Skynet/kenpo-assist/releases/latest/download/KenpoAssist-macos"
+    win: "https://github.com/Evolved-Skynet/kenpo-assist/releases/latest/download/KenpoAssist-windows.exe"
   };
   function dlClick(e) {
     const os = e.currentTarget.getAttribute('data-os');
