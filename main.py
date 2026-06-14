@@ -501,17 +501,49 @@ def resolve_provider(requested: str = None) -> str:
     return provider
 
 
+def _resolve_npm_entry(prefix_dir: str, package: str, exe_name: str):
+    """npmグローバルの .cmd ラッパーが呼ぶ実体エントリJSを package.json の bin から解決する。
+    例: <prefix>\\node_modules\\@google\\gemini-cli\\package.json の bin → dist/index.js"""
+    pkg_dir = os.path.join(prefix_dir, "node_modules", *package.split("/"))
+    try:
+        with open(os.path.join(pkg_dir, "package.json"), encoding="utf-8") as f:
+            binf = json.load(f).get("bin")
+    except (OSError, ValueError):
+        return None
+    rel = None
+    if isinstance(binf, str):
+        rel = binf
+    elif isinstance(binf, dict):
+        rel = binf.get(exe_name) or next(iter(binf.values()), None)
+    if not rel:
+        return None
+    entry = os.path.normpath(os.path.join(pkg_dir, rel))
+    return entry if os.path.exists(entry) else None
+
+
+def _windows_cmd(cmd: list, package: str) -> list:
+    """Windowsでnpm製CLI(.cmd/.bat)を node.exe + 実体JS の直接実行に変換する。
+    cmd.exe(/c)を介すと、改行や全角記号（【】「」等）を含むプロンプト引数が
+    再パースで壊れAIに正しく伝わらない。node.exe へ実体スクリプトを直接渡し、
+    list引数(shell=False)でエスケープ問題を根絶する。"""
+    exe = shutil.which(cmd[0])
+    if not exe:
+        return cmd  # 後段の FileNotFoundError で「見つかりません」として通知
+    if not exe.lower().endswith((".cmd", ".bat")):
+        return [exe] + cmd[1:]  # 実exeならフルパスで直接起動
+    node = shutil.which("node")
+    entry = _resolve_npm_entry(os.path.dirname(exe), package, cmd[0]) if node else None
+    if node and entry:
+        return [node, entry] + cmd[1:]
+    return ["cmd", "/c"] + cmd  # 実体を解決できない場合のフォールバック
+
+
 def call_ai(prompt: str, provider: str = None, timeout: int = None) -> str:
     provider = resolve_provider(provider)
     conf = PROVIDERS[provider]
     cmd = conf["build_cmd"](prompt)
     if IS_WINDOWS:
-        # npm global installs create .cmd wrappers, not .exe files.
-        # subprocess with shell=False uses CreateProcess which only finds .exe,
-        # so resolve the full path and invoke via cmd /c when needed.
-        exe = shutil.which(cmd[0])
-        if exe and exe.lower().endswith((".cmd", ".bat")):
-            cmd = ["cmd", "/c"] + cmd
+        cmd = _windows_cmd(cmd, conf["package"])
     try:
         result = subprocess.run(
             cmd, capture_output=True,
