@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>導入マニュアル｜ケンポアシスト（KenpoAssist）</title>
+<meta name="description" content="ケンポアシストのダウンロードから初期設定・利用開始までの手順をご案内する導入マニュアルです。">
+<style>
+  :root{
+    --blue:#1a5fa8; --blue-d:#134a85; --blue-l:#eef4fb; --ink:#1f2733;
+    --gray:#5b6675; --line:#e1ebf7; --bg:#f7fafd;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    color:var(--ink);line-height:1.85;background:var(--bg);-webkit-font-smoothing:antialiased}
+  a{color:var(--blue)}
+  header.nav{background:#fff;border-bottom:1px solid var(--line)}
+  .nav-in{max-width:840px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;gap:14px}
+  .logo{font-weight:800;font-size:18px;color:var(--blue);text-decoration:none}
+  .nav-in a.back{margin-left:auto;font-size:14px;font-weight:600;text-decoration:none}
+  .wrap{max-width:840px;margin:0 auto;padding:48px 20px 80px}
+  .lead-badge{display:inline-block;background:var(--blue);color:#fff;font-weight:700;
+    font-size:13px;padding:5px 14px;border-radius:20px;margin-bottom:14px}
+  h1{font-size:26px;margin-bottom:6px}
+  .sub{color:var(--gray);font-size:14px;margin-bottom:8px}
+  .time{font-size:14px;color:var(--gray);margin-bottom:34px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:26px 28px;margin-bottom:22px;
+    box-shadow:0 4px 16px rgba(20,60,120,.05)}
+  .flow{background:var(--blue-l);border-radius:10px;padding:18px 20px;font-size:14px;line-height:2;margin:16px 0}
+  h2{font-size:19px;color:var(--blue-d);margin:0 0 14px;padding-top:2px;border-left:4px solid var(--blue);padding-left:10px}
+  h3{font-size:15px;margin:18px 0 8px}
+  p{margin-bottom:10px}
+  ul,ol{margin:0 0 12px 22px}
+  li{margin-bottom:4px}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin:10px 0 16px}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+  th{background:var(--blue-l);color:var(--blue-d)}
+  code{background:var(--blue-l);padding:1px 6px;border-radius:4px;font-size:13px;color:var(--blue-d)}
+  .note{background:#fffbe9;border:1px solid #f0e3b0;border-radius:8px;padding:12px 16px;font-size:14px;margin:10px 0}
+  .tip{background:var(--blue-l);border-radius:8px;padding:12px 16px;font-size:14px;margin:10px 0}
+  hr{border:none;border-top:1px solid var(--line);margin:28px 0}
+  footer{text-align:center;color:var(--gray);font-size:13px;padding:0 0 40px}
+  .cta{text-align:center;margin:34px 0}
+  .btn{display:inline-block;background:var(--blue);color:#fff;font-weight:700;
+    padding:12px 26px;border-radius:8px;text-decoration:none;font-size:15px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="logo" href="index.html">ケンポアシスト</a>
+    <a class="back" href="index.html#trial">← LPに戻る</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <span class="lead-badge">ご利用者向け 導入マニュアル</span>
+  <h1>ケンポアシスト（KenpoAssist）導入マニュアル</h1>
+  <p class="sub">健保事務のAI相棒</p>
+  <p class="time">所要時間の目安：初回のみ 20〜40分（AIの準備を含む）。2回目以降はダブルクリックで起動するだけです。</p>
+
+  <div class="card">
+    <h2>＜全体の流れ＞</h2>
+    <div class="flow">
+      ① ケンポアシストを起動する<br>
+      　（初回のみ）ライセンスキーを有効化する<br>
+      ② 使うAIを1つ決める（Claude / ChatGPT / Gemini）<br>
+      ③ 画面の「⚙ 初期設定」で、導入→ログイン→接続確認（初回だけ）<br>
+      ④ 画面右上で使うAIを選んで、利用開始
+    </div>
+    <p class="tip">💡 AIの準備（③）は、画面の「初期設定」ボタンからボタン操作で行えます。コマンド入力は不要です（ログインの「許可」操作のみご自身で行います）。</p>
+  </div>
+
+  <div class="card">
+    <h2>① ケンポアシストを起動する</h2>
+    <ol>
+      <li>お渡しした <code>KenpoAssist.exe</code> を<b>ダブルクリック</b>します</li>
+      <li>小さな黒い画面（起動状況の表示）が出て、自動的にブラウザで画面が開きます
+        <br><small>開かない場合は、ブラウザのアドレス欄に <code>http://127.0.0.1:8765/</code> と入力</small></li>
+      <li>使い終わったら、黒い画面で <b>Ctrl + C</b> を押すか、画面を閉じれば終了します</li>
+    </ol>
+    <div class="note">⚠️ Windowsで「WindowsによってPCが保護されました」と出た場合は、「詳細情報」→「実行」で起動できます（社内ルールに従ってください）。</div>
+
+    <h3>初回のみ：ライセンスキーの有効化</h3>
+    <p>初めて起動すると「🔑 ライセンスの有効化」画面が表示されます。ご購入時にお渡しした<b>ライセンスキー</b>を貼り付けて「有効化する」を押してください。一度有効化すれば、次回以降は表示されません。</p>
+  </div>
+
+  <div class="card">
+    <h2>② 使うAIを1つ決める</h2>
+    <p>本システムは以下の3つのAIに対応しています。すでに有料プランをご契約のものを選ぶのがおすすめです。</p>
+    <table>
+      <tr><th>AI</th><th>対応する契約の例</th></tr>
+      <tr><td><b>Claude</b>（クロード）</td><td>Claude Pro / Max</td></tr>
+      <tr><td><b>ChatGPT</b>（チャットジーピーティー）</td><td>ChatGPT Plus / Pro</td></tr>
+      <tr><td><b>Gemini</b>（ジェミニ）</td><td>Google アカウント（Gemini）</td></tr>
+    </table>
+    <p class="tip">後から画面で切り替えられます。まずは1つで始めれば十分です。</p>
+
+    <h3>共通の準備：Node.js を入れる（初回のみ）</h3>
+    <p>AIの導入には「Node.js」というソフトが必要です。未導入の場合のみ、先に入れてください。</p>
+    <ul>
+      <li>公式サイト <a href="https://nodejs.org/" target="_blank" rel="noopener">nodejs.org</a> から「LTS」版をダウンロードして、画面に従いインストール</li>
+      <li>インストール後、本システムを一度再起動してください</li>
+      <li>（初期設定画面に「✅ Node.js 導入済み」と表示されていれば不要です）</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>③ 「⚙ 初期設定」でAIを準備する（初回だけ・コマンド入力不要）</h2>
+    <p>画面右上の「⚙ 初期設定」ボタンを押すと、準備用の画面が開きます。選んだAIの欄で、上から順にボタンを押すだけです。</p>
+    <ol>
+      <li><b>① 導入する</b> … クリックするとAIのプログラムが自動で入ります（数分かかることがあります）</li>
+      <li><b>② ログイン</b> … ボタンを押すと別画面が開きます。表示された案内に従い、ブラウザでご自身のアカウントにログイン／「許可」してください</li>
+      <li><b>③ 接続確認</b> … 「✅ 接続できました」と出れば準備完了です</li>
+    </ol>
+    <ul>
+      <li>利用するAIだけ準備すればOKです（1つで始められます）。</li>
+      <li>一度ログインすれば、次回以降は不要です。</li>
+      <li>うまくいかない場合は、社内の情報システム担当の方にご相談ください。</li>
+    </ul>
+
+    <h3>（参考）コマンドで手動準備する場合</h3>
+    <p>「初期設定」ボタンを使わず、手動で準備することもできます（情シス担当者向け）。コマンドプロンプト（またはPowerShell）で、下表のコマンドを実行します。</p>
+    <table>
+      <tr><th>AI</th><th>導入</th><th>ログイン</th></tr>
+      <tr><td>Claude</td><td><code>npm install -g @anthropic-ai/claude-code</code></td><td><code>claude auth login</code></td></tr>
+      <tr><td>ChatGPT</td><td><code>npm install -g @openai/codex</code></td><td><code>codex login</code></td></tr>
+      <tr><td>Gemini</td><td><code>npm install -g @google/gemini-cli</code></td><td><code>gemini</code>（初回起動で認証）</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>④ 使い方</h2>
+    <ol>
+      <li>画面右上の「AI」で、準備したAIを選びます
+        <br><small>準備していないAIは「（未導入）」と表示され、選べません</small></li>
+      <li><b>新規問い合わせ</b>：カテゴリ・担当者名・問い合わせ内容を入力し、「AI回答草案を生成」を押します
+        <br><small>→ 回答文と、根拠となる参考文献（法令・条文）が表示されます</small></li>
+      <li><b>AIと相談</b>：草案について不明点を質問できます</li>
+      <li><b>最終回答へ反映</b>：相談結果をふまえ、回答を仕上げます</li>
+      <li><b>保存／履歴</b>：「対応中」「完了」で保存。「対応履歴」から検索・編集できます</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h2>データの保存場所</h2>
+    <ul>
+      <li>問い合わせ・回答・履歴・設定は、お使いのPCの中だけに保存されます
+        <br><small>保存先：<code>ユーザーのフォルダ\.kenpoassist\kenpo_support.db</code></small></li>
+      <li>外部のサーバーには保存されません</li>
+    </ul>
+    <div class="note">📌 AIへの送信について：回答を作る際、問い合わせの本文は選んだAI会社（Anthropic／OpenAI／Google）のクラウドに送信されます。被保険者の個人情報の取り扱いは、貴組合の規程に従ってご利用ください。</div>
+  </div>
+
+  <div class="card">
+    <h2>困ったときは（トラブルシューティング）</h2>
+    <table>
+      <tr><th>症状</th><th>対処</th></tr>
+      <tr><td>右上でAIが「（未導入）」になっている</td><td>「⚙ 初期設定」で③の導入・ログインが完了しているか確認。完了後、本システムを再起動</td></tr>
+      <tr><td>「CLIが見つかりません」と出る</td><td>そのAIが未導入。「⚙ 初期設定」の「① 導入する」を実行</td></tr>
+      <tr><td>「ログイン状態・利用上限を確認」と出る</td><td>「⚙ 初期設定」の「② ログイン」をやり直す。または利用上限の可能性</td></tr>
+      <tr><td>応答が返ってこない／遅い</td><td>少し待つ。AI側が混雑している場合があります</td></tr>
+      <tr><td>ブラウザ画面が開かない</td><td>アドレス欄に <code>http://127.0.0.1:8765/</code> を直接入力</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>ご利用上の大切なお願い</h2>
+    <ul>
+      <li>本システムはお一人での通常利用を前提としています。各AIの個人向けプランの規約上、複数名での共有や常時の大量利用は避けてください。</li>
+      <li>複数のご担当者で使う場合は、お一人ずつ本システムを入れ、各自のアカウントでご利用ください。</li>
+    </ul>
+  </div>
+
+  <div class="cta">
+    <a class="btn" href="index.html#trial">ダウンロードページへ戻る</a>
+  </div>
+
+  <footer>ご不明な点は、販売元までお問い合わせください。</footer>
+</div>
+
+</body>
+</html>
