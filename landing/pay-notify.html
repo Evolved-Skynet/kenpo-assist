@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>お支払いのご連絡｜ケンポアシスト（KenpoAssist）</title>
+<meta name="description" content="ケンポアシストのご購入代金（JPYC / Stripe）をお支払い後、ライセンスキー発行のためのご連絡はこちらのフォームからお願いします。">
+<style>
+  :root{
+    --blue:#1a5fa8; --blue-d:#134a85; --blue-l:#eef4fb; --ink:#1f2733;
+    --gray:#5b6675; --line:#e1ebf7; --bg:#f7fafd;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    color:var(--ink);line-height:1.8;background:var(--bg);-webkit-font-smoothing:antialiased}
+  a{color:var(--blue)}
+  header.nav{background:#fff;border-bottom:1px solid var(--line)}
+  .nav-in{max-width:680px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;gap:14px}
+  .logo{font-weight:800;font-size:18px;color:var(--blue);text-decoration:none}
+  .nav-in a.back{margin-left:auto;font-size:14px;font-weight:600;text-decoration:none}
+  .wrap{max-width:680px;margin:0 auto;padding:48px 20px 80px}
+  h1{font-size:24px;text-align:center;margin-bottom:8px}
+  .sec-sub{text-align:center;color:var(--gray);margin-bottom:36px;font-size:14px}
+
+  .btn{display:inline-block;background:var(--blue);color:#fff;font-weight:700;
+    padding:14px 30px;border-radius:8px;border:none;cursor:pointer;font-size:16px;
+    transition:.2s;box-shadow:0 4px 14px rgba(26,95,168,.25)}
+  .btn:hover{background:var(--blue-d);transform:translateY(-1px)}
+
+  form.cf{max-width:620px;margin:0 auto;background:#fff;border:1px solid var(--line);
+    border-radius:14px;padding:34px;display:grid;gap:16px;box-shadow:0 4px 16px rgba(20,60,120,.05)}
+  .cf label{font-size:13px;font-weight:700}
+  .cf .req{color:#c0392b;font-size:12px;margin-left:4px}
+  .cf .opt{color:var(--gray);font-size:12px;margin-left:4px;font-weight:600}
+  .cf input{width:100%;border:1px solid var(--line);border-radius:8px;
+    padding:11px 13px;font-size:14px;font-family:inherit}
+  .cf input:focus{outline:none;border-color:var(--blue)}
+  .cf .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:560px){.cf .row2{grid-template-columns:1fr}}
+  .cf .note{font-size:12px;color:var(--gray)}
+  #pf-msg{font-size:14px;font-weight:700;text-align:center}
+
+  .pay-method{display:flex;gap:12px;flex-wrap:wrap}
+  .pm-opt{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;
+    padding:11px 16px;font-size:14px;font-weight:600;cursor:pointer;flex:1;min-width:150px}
+  .pm-opt input[type="radio"]{width:auto;accent-color:var(--blue);margin:0;flex-shrink:0}
+  .pm-opt:has(input:checked){border-color:var(--blue);background:var(--blue-l)}
+
+  footer{text-align:center;color:var(--gray);font-size:13px;padding:0 0 40px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="logo" href="index.html">ケンポアシスト</a>
+    <a class="back" href="index.html#price">← 価格ページに戻る</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <h1>お支払いのご連絡</h1>
+  <p class="sec-sub">お支払いが完了しましたら、こちらのフォームからご連絡ください。内容を確認のうえ、ライセンスキーをメールでお送りします。<br>（お支払いとライセンスキーの発行は自動連動していません）</p>
+
+  <form class="cf" id="pay-form" action="https://formspree.io/f/mykabnlo" method="POST">
+    <input type="hidden" name="_subject" value="【ケンポアシスト】お支払いのご連絡">
+    <div class="row2">
+      <div>
+        <label>組織名 / 健保組合名<span class="opt">任意</span></label>
+        <input type="text" name="organization">
+      </div>
+      <div>
+        <label>ご担当者名<span class="opt">任意</span></label>
+        <input type="text" name="name">
+      </div>
+    </div>
+    <div class="row2">
+      <div>
+        <label>メールアドレス<span class="req">必須</span></label>
+        <input type="email" name="email" required>
+      </div>
+      <div>
+        <label>支払日<span class="req">必須</span></label>
+        <input type="date" name="paid_on" required>
+      </div>
+    </div>
+    <div>
+      <label>お支払い方法<span class="req">必須</span></label>
+      <div class="pay-method">
+        <label class="pm-opt"><input type="radio" name="pay_method" value="JPYC" required>JPYC</label>
+        <label class="pm-opt"><input type="radio" name="pay_method" value="Stripe">Stripe（クレジットカード）</label>
+      </div>
+    </div>
+    <div id="wallet-field" hidden>
+      <label>送信元ウォレットアドレス<span class="req">必須</span></label>
+      <input type="text" name="wallet_address" placeholder="0x... （JPYCを送金したウォレットのアドレス）">
+    </div>
+    <button type="submit" class="btn" style="width:100%">お支払いを連絡する</button>
+    <p class="note">ライセンスキーは、ご入力のメールアドレス宛にお送りします。お支払い方法（JPYC / Stripe）や送金元などがあれば、あわせてお知らせいただくと確認がスムーズです。</p>
+    <p id="pf-msg"></p>
+  </form>
+</div>
+
+<footer>© <span id="yr"></span> KenpoAssist. All rights reserved.</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  const form = document.getElementById('pay-form');
+  const msg = document.getElementById('pf-msg');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    msg.style.color = '#1f2733';
+    if (form.action.includes('YOUR_FORM_ID')) {
+      msg.style.color = '#c0392b';
+      msg.textContent = '※ 送信先が未設定です（フォームのaction属性を設定してください）。';
+      return;
+    }
+    msg.textContent = '送信中...';
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST', body: new FormData(form),
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.reset();
+        msg.style.color = '#1a7f43';
+        msg.textContent = 'お支払いのご連絡を受け付けました。確認のうえ、ライセンスキーをメールでお送りします。';
+      } else {
+        throw new Error();
+      }
+    } catch (_) {
+      msg.style.color = '#c0392b';
+      msg.textContent = '送信に失敗しました。お手数ですが時間をおいて再度お試しください。';
+    }
+  });
+
+  // 支払い方法に応じて、送信元ウォレットアドレス欄（JPYCのみ必須）を出し分け
+  const wallet = document.getElementById('wallet-field');
+  const walletInput = wallet.querySelector('input');
+  const syncWallet = () => {
+    const isJpyc = form.querySelector('input[name="pay_method"]:checked')?.value === 'JPYC';
+    wallet.hidden = !isJpyc;
+    walletInput.required = isJpyc;
+    if (!isJpyc) walletInput.value = '';
+  };
+  form.querySelectorAll('input[name="pay_method"]').forEach(r => r.addEventListener('change', syncWallet));
+  form.addEventListener('reset', () => setTimeout(syncWallet, 0));
+</script>
+</body>
+</html>
