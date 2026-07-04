@@ -106,6 +106,35 @@
   .price-list li{list-style:none;display:flex;gap:10px;font-size:14px}
   .price-list li svg{width:18px;height:18px;stroke:var(--ok);flex-shrink:0;margin-top:4px}
 
+  /* 価格・お支払い方法（2プラン） */
+  .price-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;max-width:900px;margin:0 auto 30px;align-items:stretch}
+  @media(max-width:760px){.price-grid{grid-template-columns:1fr}}
+  .pay-card{background:#fff;border:2px solid var(--line);border-radius:16px;padding:34px 30px;
+    text-align:center;box-shadow:0 14px 40px rgba(20,60,120,.08);display:flex;flex-direction:column}
+  .pay-card.feature{border-color:var(--blue);box-shadow:0 18px 48px rgba(26,95,168,.18)}
+  .pay-badge{display:inline-block;align-self:center;background:var(--blue-l);color:var(--blue);font-weight:700;
+    font-size:13px;padding:5px 16px;border-radius:20px;margin-bottom:14px}
+  .pay-card.feature .pay-badge{background:var(--blue);color:#fff}
+  .pay-strike{color:var(--gray);text-decoration:line-through;font-size:15px;line-height:1;height:18px}
+  .pay-amt{font-size:46px;font-weight:800;color:var(--ink);line-height:1.1;margin-top:2px}
+  .pay-amt small{font-size:18px;color:var(--gray);font-weight:600}
+  .pay-unit{color:var(--gray);font-size:13px;margin:6px 0 20px}
+  .qr-box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;width:184px;margin:0 auto 14px}
+  .qr-box img{width:100%;display:block}
+  .pay-desc{font-size:13px;color:var(--gray);margin-bottom:20px}
+  .net-label{font-size:12px;font-weight:700;color:var(--gray);margin-bottom:12px}
+  .net-row{display:flex;flex-wrap:wrap;justify-content:center;gap:14px 12px}
+  .net-item{display:flex;flex-direction:column;align-items:center;gap:5px;width:66px}
+  .net-item img{width:30px;height:30px;object-fit:contain}
+  .net-item span{font-size:10px;color:var(--gray);line-height:1.25}
+  .pay-foot{margin-top:auto;padding-top:8px}
+  .incl-strip{max-width:900px;margin:0 auto;background:var(--bg);border:1px solid var(--line);
+    border-radius:12px;padding:22px 26px}
+  .incl-strip ul{display:grid;grid-template-columns:1fr 1fr;gap:8px 22px;list-style:none}
+  @media(max-width:560px){.incl-strip ul{grid-template-columns:1fr}}
+  .incl-strip li{display:flex;gap:9px;font-size:14px;color:var(--ink)}
+  .incl-strip li svg{width:18px;height:18px;stroke:var(--ok);flex-shrink:0;margin-top:4px}
+
   /* 無料お試し */
   .trial-box{max-width:760px;margin:0 auto;background:linear-gradient(160deg,#eef4fb,#dcebfb);
     border:1px solid #cfe0f6;border-radius:16px;padding:38px 32px;text-align:center}
@@ -132,6 +161,16 @@
     border-radius:14px;padding:34px;display:grid;gap:16px}
   .cf label{font-size:13px;font-weight:700}
   .cf .req{color:#c0392b;font-size:12px;margin-left:4px}
+  .cf .opt{color:var(--gray);font-size:12px;margin-left:4px;font-weight:600}
+  .pay-method{display:flex;gap:12px;flex-wrap:wrap}
+  .pm-opt{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:8px;
+    padding:11px 16px;font-size:14px;font-weight:600;cursor:pointer;flex:1;min-width:150px}
+  .pm-opt input[type="radio"]{width:auto;accent-color:var(--blue);margin:0;flex-shrink:0}
+  .pm-opt:has(input:checked){border-color:var(--blue);background:var(--blue-l)}
+  /* 支払い連絡CTA */
+  .notify-cta{text-align:center;max-width:900px;margin:0 auto 30px}
+  .notify-cta .btn{padding:16px 44px;font-size:17px}
+  .notify-cta p{font-size:13px;color:var(--gray);margin-top:12px}
   .cf input,.cf textarea{width:100%;border:1px solid var(--line);border-radius:8px;
     padding:11px 13px;font-size:14px;font-family:inherit}
   .cf input:focus,.cf textarea:focus{outline:none;border-color:var(--blue)}
@@ -339,26 +378,69 @@
   </div>
 </section>
 
-<!-- 価格 -->
+<!-- 価格・お支払い方法 -->
 <section id="price">
   <div class="wrap">
-    <h2 class="sec">価格</h2>
-    <p class="sec-sub">買い切り・席単位ライセンス。月額費用はかかりません。まずは<a href="#trial">14日間の無料お試し</a>からどうぞ。</p>
-    <div class="price-card">
-      <span class="price-badge">買い切りライセンス</span>
-      <div class="price-amt"><small>¥</small>1,000</div>
-      <div class="price-unit">（税込）／ 1席（1台）あたり・買い切り</div>
-      <ul class="price-list">
+    <h2 class="sec">価格・お支払い方法</h2>
+    <p class="sec-sub">買い切り・席単位ライセンス。月額費用はかかりません。お支払い方法は2種類からお選びいただけます。まずは<a href="#trial">14日間の無料お試し</a>からどうぞ。</p>
+
+    <div class="price-grid">
+      <!-- JPYC -->
+      <div class="pay-card feature">
+        <span class="pay-badge">JPYC特別価格</span>
+        <div class="pay-strike">通常 ¥1,000</div>
+        <div class="pay-amt"><small>¥</small>500</div>
+        <div class="pay-unit">1席（1台）あたり・買い切り／JPYCでのお支払い</div>
+        <div class="qr-box"><img src="assets/jpyc-qr.jpg" alt="JPYC お支払い用QRコード"></div>
+        <p class="pay-desc">上記QRコードを読み取り、<strong>JPYC（日本円ステーブルコイン）</strong>で 500円分をお送りください。</p>
+        <div class="pay-foot">
+          <p class="net-label">対応ネットワーク</p>
+          <div class="net-row">
+            <div class="net-item"><img src="assets/base.svg" alt="BASE"><span>BASE</span></div>
+            <div class="net-item"><img src="assets/ethereum.svg" alt="Ethereum"><span>Ethereum</span></div>
+            <div class="net-item"><img src="assets/polygon.svg" alt="Polygon"><span>Polygon</span></div>
+            <div class="net-item"><img src="assets/avalanche.svg" alt="Avalanche"><span>Avalanche</span></div>
+            <div class="net-item"><img src="assets/bnb.svg" alt="BNB Smart Chain"><span>BNB Smart&nbsp;Chain</span></div>
+            <div class="net-item"><img src="assets/arbitrum.svg" alt="Arbitrum One"><span>Arbitrum One</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stripe -->
+      <div class="pay-card">
+        <span class="pay-badge">クレジットカード決済</span>
+        <div class="pay-strike" aria-hidden="true">&nbsp;</div>
+        <div class="pay-amt"><small>¥</small>1,000</div>
+        <div class="pay-unit">1席（1台）あたり・買い切り／Stripe決済</div>
+        <p class="pay-desc" style="margin-top:20px">
+          下のボタンから決済ページ（Stripe）に進み、クレジットカードでお支払いください。
+          主要なクレジットカードに対応しています。
+        </p>
+        <div class="pay-foot">
+          <a href="https://buy.stripe.com/00w14p0Jc0yR5Zb6AQcMM00" target="_blank" rel="noopener" class="btn" style="width:100%">Stripeでお支払い（¥1,000）</a>
+          <p style="font-size:12px;color:var(--gray);margin-top:12px">決済は Stripe の安全なページで行われます。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="notify-cta">
+      <a href="#pay-notify" class="btn">お支払いを連絡する</a>
+      <p>お支払い（JPYC / Stripe）が完了したら、こちらからご連絡ください。ライセンスキーをメールでお送りします。</p>
+    </div>
+
+    <div class="incl-strip">
+      <ul>
         <li><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>すべての機能をご利用いただけます</li>
         <li><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>月額・追加課金なしの買い切り</li>
         <li><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>Windows 対応</li>
         <li><svg fill="none" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>複数名でご利用の場合は人数分のライセンス</li>
       </ul>
-      <a href="#contact" class="btn" style="width:100%">購入について問い合わせる</a>
-      <p style="font-size:12px;color:var(--gray);margin-top:14px">
-        ※ ご利用には Claude / ChatGPT / Gemini いずれかのアカウントが別途必要です。
-      </p>
     </div>
+
+    <p style="text-align:center;font-size:13px;color:var(--gray);margin-top:22px">
+      ※ ご利用には Claude / ChatGPT / Gemini いずれかのアカウントが別途必要です。<br>
+      お支払い後は<a href="#pay-notify">お支払いのご連絡</a>フォームからご連絡ください。ライセンスキーをメールでお送りします。
+    </p>
   </div>
 </section>
 
@@ -391,6 +473,51 @@
   </div>
 </section>
 
+<!-- 支払い連絡 -->
+<section id="pay-notify">
+  <div class="wrap">
+    <h2 class="sec">お支払いのご連絡</h2>
+    <p class="sec-sub">お支払いが完了しましたら、こちらのフォームからご連絡ください。内容を確認のうえ、ライセンスキーをメールでお送りします。<br>（お支払いとライセンスキーの発行は自動連動していません）</p>
+    <form class="cf" id="pay-form" action="https://formspree.io/f/mykabnlo" method="POST">
+      <input type="hidden" name="_subject" value="【ケンポアシスト】お支払いのご連絡">
+      <div class="row2">
+        <div>
+          <label>組織名 / 健保組合名<span class="opt">任意</span></label>
+          <input type="text" name="organization">
+        </div>
+        <div>
+          <label>ご担当者名<span class="opt">任意</span></label>
+          <input type="text" name="name">
+        </div>
+      </div>
+      <div class="row2">
+        <div>
+          <label>メールアドレス<span class="req">必須</span></label>
+          <input type="email" name="email" required>
+        </div>
+        <div>
+          <label>支払日<span class="req">必須</span></label>
+          <input type="date" name="paid_on" required>
+        </div>
+      </div>
+      <div>
+        <label>お支払い方法<span class="req">必須</span></label>
+        <div class="pay-method">
+          <label class="pm-opt"><input type="radio" name="pay_method" value="JPYC" required>JPYC</label>
+          <label class="pm-opt"><input type="radio" name="pay_method" value="Stripe">Stripe（クレジットカード）</label>
+        </div>
+      </div>
+      <div id="wallet-field" hidden>
+        <label>送信元ウォレットアドレス<span class="req">必須</span></label>
+        <input type="text" name="wallet_address" placeholder="0x... （JPYCを送金したウォレットのアドレス）">
+      </div>
+      <button type="submit" class="btn" style="width:100%">お支払いを連絡する</button>
+      <p class="note">ライセンスキーは、ご入力のメールアドレス宛にお送りします。お支払い方法（JPYC / Stripe）や送金元などがあれば、あわせてお知らせいただくと確認がスムーズです。</p>
+      <p id="pf-msg"></p>
+    </form>
+  </div>
+</section>
+
 <!-- 問い合わせ -->
 <section id="contact" class="contact">
   <div class="wrap">
@@ -401,23 +528,17 @@
       <input type="hidden" name="_subject" value="【ケンポアシスト】HPからのお問い合わせ">
       <div class="row2">
         <div>
-          <label>組織名 / 健保組合名<span class="req">必須</span></label>
-          <input type="text" name="organization" required>
+          <label>組織名 / 健保組合名<span class="opt">任意</span></label>
+          <input type="text" name="organization">
         </div>
         <div>
-          <label>ご担当者名<span class="req">必須</span></label>
-          <input type="text" name="name" required>
+          <label>ご担当者名<span class="opt">任意</span></label>
+          <input type="text" name="name">
         </div>
       </div>
-      <div class="row2">
-        <div>
-          <label>メールアドレス<span class="req">必須</span></label>
-          <input type="email" name="email" required>
-        </div>
-        <div>
-          <label>電話番号（任意）</label>
-          <input type="tel" name="phone">
-        </div>
+      <div>
+        <label>メールアドレス<span class="req">必須</span></label>
+        <input type="email" name="email" required>
       </div>
       <div>
         <label>お問い合わせ内容<span class="req">必須</span></label>
@@ -461,34 +582,54 @@
   }
 
   // フォーム送信（Formspree等のJSON応答に対応。未設定時は案内を表示）
-  const form = document.getElementById('contact-form');
-  const msg = document.getElementById('cf-msg');
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    msg.style.color = '#1f2733';
-    if (form.action.includes('YOUR_FORM_ID')) {
-      msg.style.color = '#c0392b';
-      msg.textContent = '※ 送信先が未設定です（フォームのaction属性を設定してください）。';
-      return;
-    }
-    msg.textContent = '送信中...';
-    try {
-      const res = await fetch(form.action, {
-        method: 'POST', body: new FormData(form),
-        headers: { 'Accept': 'application/json' }
-      });
-      if (res.ok) {
-        form.reset();
-        msg.style.color = '#1a7f43';
-        msg.textContent = '送信しました。ご連絡ありがとうございます。担当者よりご返信いたします。';
-      } else {
-        throw new Error();
+  function bindForm(formId, msgId, successText) {
+    const form = document.getElementById(formId);
+    const msg = document.getElementById(msgId);
+    if (!form || !msg) return;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.style.color = '#1f2733';
+      if (form.action.includes('YOUR_FORM_ID')) {
+        msg.style.color = '#c0392b';
+        msg.textContent = '※ 送信先が未設定です（フォームのaction属性を設定してください）。';
+        return;
       }
-    } catch (_) {
-      msg.style.color = '#c0392b';
-      msg.textContent = '送信に失敗しました。お手数ですが時間をおいて再度お試しください。';
-    }
-  });
+      msg.textContent = '送信中...';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST', body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.reset();
+          msg.style.color = '#1a7f43';
+          msg.textContent = successText;
+        } else {
+          throw new Error();
+        }
+      } catch (_) {
+        msg.style.color = '#c0392b';
+        msg.textContent = '送信に失敗しました。お手数ですが時間をおいて再度お試しください。';
+      }
+    });
+  }
+  bindForm('contact-form', 'cf-msg', '送信しました。ご連絡ありがとうございます。担当者よりご返信いたします。');
+  bindForm('pay-form', 'pf-msg', 'お支払いのご連絡を受け付けました。確認のうえ、ライセンスキーをメールでお送りします。');
+
+  // 支払い方法に応じて、送信元ウォレットアドレス欄（JPYCのみ必須）を出し分け
+  const payForm = document.getElementById('pay-form');
+  if (payForm) {
+    const wallet = document.getElementById('wallet-field');
+    const walletInput = wallet.querySelector('input');
+    const syncWallet = () => {
+      const isJpyc = payForm.querySelector('input[name="pay_method"]:checked')?.value === 'JPYC';
+      wallet.hidden = !isJpyc;
+      walletInput.required = isJpyc;
+      if (!isJpyc) walletInput.value = '';
+    };
+    payForm.querySelectorAll('input[name="pay_method"]').forEach(r => r.addEventListener('change', syncWallet));
+    payForm.addEventListener('reset', () => setTimeout(syncWallet, 0));
+  }
 </script>
 </body>
 </html>
