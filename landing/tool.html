@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>任意継続 vs 国民健康保険 かんたん比較シミュレーター｜ケンポアシスト</title>
+<meta name="description" content="退職後の健康保険を、任意継続と国民健康保険のどちらにするか迷ったら。月収・年齢・お住まいの市区町村を入力するだけで、健康保険料・介護保険料・子ども子育て支援金の月額目安を比較できる無料ツールです。">
+<style>
+  :root{
+    --blue:#1a5fa8; --blue-d:#134a85; --blue-l:#eef4fb; --ink:#1f2733;
+    --gray:#5b6675; --line:#e1ebf7; --bg:#f7fafd; --ok:#1a7f43; --warn:#b7791f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+    color:var(--ink);line-height:1.8;background:var(--bg);-webkit-font-smoothing:antialiased}
+  a{color:var(--blue)}
+  .wrap{max-width:820px;margin:0 auto;padding:0 20px}
+
+  header.nav{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+  .nav-in{max-width:820px;margin:0 auto;padding:16px 20px;display:flex;align-items:center;gap:14px}
+  .logo{font-weight:800;font-size:18px;color:var(--blue);text-decoration:none}
+  .nav-in a.back{margin-left:auto;font-size:14px;font-weight:600;text-decoration:none}
+
+  .hero{padding:44px 0 8px}
+  .hero .tagline{display:inline-block;background:var(--blue);color:#fff;font-weight:700;
+    font-size:13px;padding:5px 14px;border-radius:20px;margin-bottom:14px}
+  .hero h1{font-size:26px;line-height:1.5;margin-bottom:14px}
+  .hero p.lead{color:var(--gray);font-size:15px;margin-bottom:6px}
+
+  .disclaimer{background:#fffbe9;border:1px solid #f0e3b0;border-radius:10px;padding:16px 20px;
+    font-size:13px;color:#6b5800;margin:22px 0 8px;line-height:1.75}
+  .disclaimer b{color:#4a3d00}
+
+  section{padding:34px 0}
+  h2.sec{font-size:19px;margin-bottom:4px;display:flex;align-items:center;gap:10px}
+  h2.sec .n{flex-shrink:0;width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;
+    font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+  p.sec-sub{color:var(--gray);font-size:13px;margin:6px 0 18px 38px}
+
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:26px;margin-left:0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+  @media(max-width:600px){.grid2,.grid3{grid-template-columns:1fr}}
+
+  .fld label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+  .fld .hint{font-size:12px;color:var(--gray);font-weight:400;display:block;margin-top:4px;line-height:1.6}
+  .fld input[type=number],.fld input[type=text],.fld select{
+    width:100%;border:1px solid var(--line);border-radius:8px;padding:10px 12px;
+    font-size:14px;font-family:inherit;background:#fff}
+  .fld input:focus,.fld select:focus{outline:none;border-color:var(--blue)}
+  .fld{margin-bottom:16px}
+  .fld.tight{margin-bottom:6px}
+
+  .radio-row{display:flex;gap:10px;flex-wrap:wrap}
+  .radio-opt{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:8px;
+    padding:9px 14px;font-size:13px;font-weight:600;cursor:pointer;flex:1;min-width:180px}
+  .radio-opt input{accent-color:var(--blue);margin:0;flex-shrink:0}
+  .radio-opt:has(input:checked){border-color:var(--blue);background:var(--blue-l)}
+
+  .sub-block{border-top:1px dashed var(--line);margin-top:16px;padding-top:16px}
+
+  table.rate-table{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
+  table.rate-table th,table.rate-table td{border:1px solid var(--line);padding:7px 6px;text-align:center}
+  table.rate-table th{background:var(--blue-l);color:var(--blue-d);font-weight:700;font-size:12px}
+  table.rate-table td input{width:100%;border:1px solid var(--line);border-radius:5px;padding:5px 4px;
+    font-size:12.5px;font-family:inherit;text-align:right}
+  table.rate-table td:first-child{background:var(--bg);font-weight:700;text-align:left;padding-left:10px}
+  .rate-table-wrap{overflow-x:auto}
+
+  .btn{display:inline-block;background:var(--blue);color:#fff;font-weight:700;
+    padding:15px 30px;border-radius:8px;border:none;cursor:pointer;font-size:16px;
+    transition:.2s;box-shadow:0 4px 14px rgba(26,95,168,.25);width:100%}
+  .btn:hover{background:var(--blue-d)}
+
+  .result{display:none}
+  .result.show{display:block}
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+  @media(max-width:600px){.compare-grid{grid-template-columns:1fr}}
+  .rc{border-radius:14px;padding:22px;text-align:center;border:2px solid var(--line)}
+  .rc.win{border-color:var(--ok);background:#f2faf5}
+  .rc .rc-label{font-size:13px;font-weight:700;color:var(--gray);margin-bottom:6px}
+  .rc.win .rc-label{color:var(--ok)}
+  .rc .rc-amt{font-size:32px;font-weight:800;color:var(--ink)}
+  .rc .rc-amt small{font-size:14px;font-weight:600;color:var(--gray)}
+  .rc .rc-badge{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;color:var(--ok);
+    background:#e2f5e8;padding:3px 12px;border-radius:20px}
+
+  .bar-row{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:12.5px}
+  .bar-row .bar-label{width:96px;flex-shrink:0;color:var(--gray);font-weight:600}
+  .bar-track{flex:1;background:var(--bg);border-radius:6px;overflow:hidden;height:20px}
+  .bar-fill{height:100%;background:var(--blue);border-radius:6px}
+  .bar-fill.alt{background:#7fa8d6}
+  .bar-row .bar-val{width:90px;text-align:right;flex-shrink:0;font-weight:700}
+
+  .breakdown{margin-top:22px}
+  table.bd{width:100%;border-collapse:collapse;font-size:13.5px}
+  table.bd th,table.bd td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:right}
+  table.bd th:first-child,table.bd td:first-child{text-align:left}
+  table.bd th{color:var(--gray);font-weight:700;font-size:12px}
+  table.bd tr.total td{font-weight:800;border-top:2px solid var(--ink);border-bottom:none}
+
+  .result-note{font-size:12px;color:var(--gray);margin-top:16px;line-height:1.8}
+
+  footer{text-align:center;color:var(--gray);font-size:12px;padding:20px 0 40px}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-in">
+    <a class="logo" href="index.html">ケンポアシスト</a>
+    <a class="back" href="index.html">← トップページに戻る</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="hero">
+    <span class="tagline">無料シミュレーター</span>
+    <h1>退職後の健康保険、<br>「任意継続」と「国民健康保険」どっちが安い？</h1>
+    <p class="lead">月収・年齢・お住まいの市区町村を入力すると、健康保険料・介護保険料・子ども子育て支援金の月額目安をその場で比較できます。入力内容は送信されず、この画面の中だけで計算されます。</p>
+  </div>
+
+  <div class="disclaimer">
+    <b>⚠ ご利用にあたって：</b>
+    本ツールが示す金額は、公開されている料率をもとにした<b>概算・目安</b>です。実際の保険料は、加入する健康保険組合・お住まいの市区町村の算定ルール、端数処理、年度改定などにより異なる場合があります。正式な金額は、必ず<b>加入中の健康保険組合</b>および<b>お住まいの市区町村（国保担当窓口）</b>にご確認ください。任意継続には「資格喪失日から20日以内の申請」「加入期間は最長2年」などの条件もあわせてご確認ください。
+  </div>
+
+  <form id="calc-form">
+
+    <section>
+      <h2 class="sec"><span class="n">1</span>基本情報</h2>
+      <p class="sec-sub">退職時点のご年齢と月収を入力してください。</p>
+      <div class="card">
+        <div class="grid2">
+          <div class="fld">
+            <label>退職時点のご年齢</label>
+            <input type="number" id="age" min="0" max="99" step="1" required placeholder="例）58">
+            <span class="hint">40〜64歳の方は介護保険料（第2号被保険者）が加算されます。</span>
+          </div>
+          <div class="fld">
+            <label>退職前の平均的な月収（額面）</label>
+            <input type="number" id="monthlyIncome" min="0" step="1000" required placeholder="例）350000">
+            <span class="hint">基本給＋諸手当（通勤手当含む）の目安額。賞与は含みません。</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec"><span class="n">2</span>任意継続の設定</h2>
+      <p class="sec-sub">加入予定の健康保険組合の料率を入力してください（初期値は協会けんぽの全国平均・令和8年度目安）。</p>
+      <div class="card">
+        <div class="grid3">
+          <div class="fld">
+            <label>健康保険料率</label>
+            <input type="number" id="niniHokenRate" min="0" step="0.01" value="9.9">
+            <span class="hint">単位：％。任意継続は全額自己負担のため、労使折半前の率（総料率）を入力します。給与明細の保険料額×2÷標準報酬月額、または健保のHPでご確認ください。</span>
+          </div>
+          <div class="fld">
+            <label>介護保険料率</label>
+            <input type="number" id="niniKaigoRate" min="0" step="0.01" value="1.62">
+            <span class="hint">単位：％。40〜64歳の方のみ加算されます。</span>
+          </div>
+          <div class="fld">
+            <label>子ども・子育て支援金率</label>
+            <input type="number" id="niniShienRate" min="0" step="0.01" value="0.23">
+            <span class="hint">単位：％。2026年度から健保・国保双方で徴収が始まった新しい制度です。</span>
+          </div>
+        </div>
+        <div class="fld tight">
+          <label>加入健保の上限基準額（平均標準報酬月額）</label>
+          <input type="number" id="niniCap" min="0" step="1000" value="320000">
+          <span class="hint">任意継続の保険料は「退職時の標準報酬月額」と「加入健保の全被保険者の平均標準報酬月額（上限基準額）」のいずれか低い方で計算されます。不明な場合は協会けんぽの目安（32万円）のままで概算できます。</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="sec"><span class="n">3</span>国民健康保険の設定</h2>
+      <p class="sec-sub">お住まいの市区町村と、世帯の加入状況を入力してください。</p>
+      <div class="card">
+        <div class="fld">
+          <label>お住まいの市区町村</label>
+          <select id="muniSelect">
+            <option value="tokyo23">東京都特別区（23区）</option>
+            <option value="osaka">大阪市</option>
+            <option value="yokohama">横浜市</option>
+            <option value="other">その他（お住まいの市区町村の料率を自分で入力）</option>
+          </select>
+          <span class="hint">上記3市区以外にお住まいの方は「その他」を選び、下の表にお住まいの市区町村の国保料率（自治体HPで「国民健康保険料 令和8年度」等で検索すると確認できます）を入力してください。</span>
+        </div>
+
+        <div class="rate-table-wrap">
+          <table class="rate-table" id="muniTable">
+            <thead>
+              <tr><th>区分</th><th>所得割率(%)</th><th>均等割額(円/人)</th><th>平等割額(円/世帯)</th><th>賦課限度額(円)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>医療分</td>
+                <td><input type="number" id="iryoRate" step="0.01"></td>
+                <td><input type="number" id="iryoKintou" step="1"></td>
+                <td><input type="number" id="iryoByoudou" step="1"></td>
+                <td><input type="number" id="iryoLimit" step="1"></td></tr>
+              <tr><td>後期高齢者支援金分</td>
+                <td><input type="number" id="shienRate2" step="0.01"></td>
+                <td><input type="number" id="shienKintou" step="1"></td>
+                <td><input type="number" id="shienByoudou" step="1"></td>
+                <td><input type="number" id="shienLimit" step="1"></td></tr>
+              <tr><td>介護納付金分<br><small>（40〜64歳）</small></td>
+                <td><input type="number" id="kaigoRate2" step="0.01"></td>
+                <td><input type="number" id="kaigoKintou" step="1"></td>
+                <td><input type="number" id="kaigoByoudou" step="1"></td>
+                <td><input type="number" id="kaigoLimit" step="1"></td></tr>
+              <tr><td>子ども・子育て<br>支援金分</td>
+                <td><input type="number" id="kodomoRate" step="0.01"></td>
+                <td><input type="number" id="kodomoKintou" step="1"></td>
+                <td><input type="number" id="kodomoByoudou" step="1"></td>
+                <td><input type="number" id="kodomoLimit" step="1"></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="sub-block">
+          <div class="grid2">
+            <div class="fld">
+              <label>基礎控除額（所得割の計算に使用）</label>
+              <input type="number" id="kisoKoujo" step="1" value="430000">
+              <span class="hint">通常は全国一律43万円（旧但し書き方式）です。</span>
+            </div>
+            <div class="fld">
+              <label>同じ国保に加入する世帯の人数</label>
+              <input type="number" id="householdCount" min="1" step="1" value="1">
+              <span class="hint">ご本人を含め、同じ国保に加入する世帯員の人数（均等割の計算に使用）。</span>
+            </div>
+          </div>
+          <div class="fld tight">
+            <label>そのうち介護納付金分の対象（40〜64歳）の人数</label>
+            <input type="number" id="kaigoCount" min="0" step="1" value="0">
+            <span class="hint">世帯人数のうち、40歳以上65歳未満の方の人数。ご本人が対象年齢の場合はご本人も含めてください（ご本人が40〜64歳の場合は自動的に1人以上として計算します）。</span>
+          </div>
+        </div>
+
+        <div class="sub-block">
+          <p style="font-size:13px;font-weight:700;margin-bottom:10px">前年の所得の入力方法</p>
+          <div class="radio-row">
+            <label class="radio-opt"><input type="radio" name="incomeMode" value="estimate" checked>退職前の月収から自動概算する</label>
+            <label class="radio-opt"><input type="radio" name="incomeMode" value="direct">給与所得の金額を直接入力する</label>
+          </div>
+          <div id="incomeEstimateFields" style="margin-top:14px">
+            <div class="fld tight">
+              <label>賞与など、月収以外の年間収入（任意）</label>
+              <input type="number" id="incomeBonusExtra" min="0" step="1000" value="0">
+              <span class="hint">「退職前の月収 × 12＋賞与等」を年収とみなし、給与所得控除（令和7年分以降の控除額）を差し引いて概算します。実際の税額計算とは端数の扱い等が異なる簡易概算です。</span>
+            </div>
+          </div>
+          <div id="incomeDirectFields" style="margin-top:14px;display:none">
+            <div class="fld tight">
+              <label>前年の給与所得の金額</label>
+              <input type="number" id="incomeDirect" min="0" step="1000">
+              <span class="hint">源泉徴収票の「給与所得控除後の金額」欄の数値を入力してください。</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="sub-block">
+          <p style="font-size:13px;font-weight:700;margin-bottom:10px">資産割（該当する場合のみ・任意）</p>
+          <div class="grid2">
+            <div class="fld tight">
+              <label>固定資産税額</label>
+              <input type="number" id="fixedAssetTax" min="0" step="1000" placeholder="未加入の場合は空欄のままでOK">
+            </div>
+            <div class="fld tight">
+              <label>資産割率</label>
+              <input type="number" id="assetRate" min="0" step="0.01" placeholder="%">
+            </div>
+          </div>
+          <span class="hint">多くの自治体では資産割は廃止されています。お住まいの市区町村に資産割がある場合のみご入力ください（医療分に加算して計算します）。</span>
+        </div>
+      </div>
+    </section>
+
+    <button type="submit" class="btn">保険料を比較する</button>
+  </form>
+
+  <div class="result" id="result">
+    <section>
+      <h2 class="sec" style="margin-top:10px">計算結果</h2>
+      <div class="compare-grid" id="compareGrid"></div>
+
+      <div class="card">
+        <p style="font-size:13px;font-weight:700;margin-bottom:12px">月額の内訳比較</p>
+        <div id="barChart"></div>
+
+        <div class="breakdown">
+          <p style="font-size:13px;font-weight:700;margin-bottom:6px">任意継続保険料の内訳（月額）</p>
+          <table class="bd" id="niniTable"></table>
+        </div>
+        <div class="breakdown">
+          <p style="font-size:13px;font-weight:700;margin-bottom:6px">国民健康保険料の内訳（年額 → 月額換算）</p>
+          <table class="bd" id="kokuhoTable"></table>
+        </div>
+
+        <p class="result-note">
+          ※ 任意継続保険料は10円未満、国民健康保険料は各区分ごとに端数処理のルールがありますが、本ツールでは概算のため円未満を四捨五入して表示しています。<br>
+          ※ 賦課限度額（上限）に達する場合は、その金額で頭打ちにしています。<br>
+          ※ 実際の金額は必ず加入健保・お住まいの市区町村にご確認ください。
+        </p>
+      </div>
+    </section>
+  </div>
+</div>
+
+<footer>
+  データ基準：令和8年度（2026年度）目安値（協会けんぽ全国平均・東京都特別区／大阪市／横浜市 公表資料等）。制度改正・年度更新により数値は変動します。<br>
+  © <span id="yr"></span> KenpoAssist.
+</footer>
+
+<script>
+document.getElementById('yr').textContent = new Date().getFullYear();
+
+const GRADES = [
+  [1,58000,0,63000],[2,68000,63000,73000],[3,78000,73000,83000],[4,88000,83000,93000],
+  [5,98000,93000,101000],[6,104000,101000,107000],[7,110000,107000,114000],[8,118000,114000,122000],
+  [9,126000,122000,130000],[10,134000,130000,138000],[11,142000,138000,146000],[12,150000,146000,155000],
+  [13,160000,155000,165000],[14,170000,165000,175000],[15,180000,175000,185000],[16,190000,185000,195000],
+  [17,200000,195000,210000],[18,220000,210000,230000],[19,240000,230000,250000],[20,260000,250000,270000],
+  [21,280000,270000,290000],[22,300000,290000,310000],[23,320000,310000,330000],[24,340000,330000,350000],
+  [25,360000,350000,370000],[26,380000,370000,395000],[27,410000,395000,425000],[28,440000,425000,455000],
+  [29,470000,455000,485000],[30,500000,485000,515000],[31,530000,515000,545000],[32,560000,545000,575000],
+  [33,590000,575000,605000],[34,620000,605000,635000],[35,650000,635000,665000],[36,680000,665000,695000],
+  [37,710000,695000,730000],[38,750000,730000,770000],[39,790000,770000,810000],[40,830000,810000,855000],
+  [41,880000,855000,905000],[42,930000,905000,955000],[43,980000,955000,1005000],[44,1030000,1005000,1055000],
+  [45,1090000,1055000,1115000],[46,1150000,1115000,1175000],[47,1210000,1175000,1235000],[48,1270000,1235000,1295000],
+  [49,1330000,1295000,1355000],[50,1390000,1355000,Infinity],
+];
+
+function lookupStandardGrade(income) {
+  for (const [, std, lo, hi] of GRADES) {
+    if (income >= lo && income < hi) return std;
+  }
+  return GRADES[GRADES.length - 1][1];
+}
+
+// 給与収入から給与所得（＝収入−給与所得控除）を概算する。
+// 令和7年分以降の給与所得控除（最低65万円、収入190万円以下に適用）に対応した簡易式。
+function estimateKyuyoShotoku(annualIncome) {
+  const A = annualIncome;
+  if (A <= 650000) return 0;
+  if (A <= 1900000) return A - 650000;               // 控除65万円
+  if (A <= 3600000) return Math.round(A * 0.7 - 80000);   // 控除 A×30%＋8万
+  if (A <= 6600000) return Math.round(A * 0.8 - 440000);  // 控除 A×20%＋44万
+  if (A <= 8500000) return Math.round(A * 0.9 - 1100000); // 控除 A×10%＋110万
+  return A - 1950000;                                 // 控除上限195万円
+}
+
+const MUNI_PRESETS = {
+  tokyo23: { kiso:430000,
+    iryo:{rate:7.51, kintou:47600, byoudou:0, limit:670000},
+    shien:{rate:2.80, kintou:17600, byoudou:0, limit:260000},
+    kaigo:{rate:2.43, kintou:17800, byoudou:0, limit:170000},
+    kodomo:{rate:0.27, kintou:1873, byoudou:0, limit:30000} },
+  osaka: { kiso:430000,
+    iryo:{rate:9.50, kintou:34990, byoudou:33908, limit:660000},
+    shien:{rate:3.06, kintou:11191, byoudou:10845, limit:260000},
+    kaigo:{rate:2.60, kintou:18682, byoudou:0, limit:170000},
+    kodomo:{rate:0.28, kintou:1745, byoudou:0, limit:30000} },
+  yokohama: { kiso:430000,
+    iryo:{rate:8.33, kintou:40870, byoudou:0, limit:670000},
+    shien:{rate:2.62, kintou:13380, byoudou:0, limit:260000},
+    kaigo:{rate:2.84, kintou:16200, byoudou:0, limit:170000},
+    kodomo:{rate:0.34, kintou:1770, byoudou:0, limit:30000} },
+  other: { kiso:430000,
+    iryo:{rate:0, kintou:0, byoudou:0, limit:670000},
+    shien:{rate:0, kintou:0, byoudou:0, limit:260000},
+    kaigo:{rate:0, kintou:0, byoudou:0, limit:170000},
+    kodomo:{rate:0, kintou:0, byoudou:0, limit:30000} },
+};
+
+const DIV_FIELD_IDS = {
+  iryo:   { rate:'iryoRate',   kintou:'iryoKintou',   byoudou:'iryoByoudou',   limit:'iryoLimit' },
+  shien:  { rate:'shienRate2', kintou:'shienKintou',  byoudou:'shienByoudou',  limit:'shienLimit' },
+  kaigo:  { rate:'kaigoRate2', kintou:'kaigoKintou',  byoudou:'kaigoByoudou',  limit:'kaigoLimit' },
+  kodomo: { rate:'kodomoRate', kintou:'kodomoKintou', byoudou:'kodomoByoudou', limit:'kodomoLimit' },
+};
+
+function applyMuniPreset(key) {
+  const preset = MUNI_PRESETS[key];
+  document.getElementById('kisoKoujo').value = preset.kiso;
+  for (const div of Object.keys(DIV_FIELD_IDS)) {
+    const ids = DIV_FIELD_IDS[div];
+    const vals = preset[div];
+    document.getElementById(ids.rate).value = vals.rate;
+    document.getElementById(ids.kintou).value = vals.kintou;
+    document.getElementById(ids.byoudou).value = vals.byoudou;
+    document.getElementById(ids.limit).value = vals.limit;
+  }
+}
+
+const muniSelect = document.getElementById('muniSelect');
+muniSelect.addEventListener('change', () => applyMuniPreset(muniSelect.value));
+applyMuniPreset(muniSelect.value);
+
+document.querySelectorAll('input[name="incomeMode"]').forEach(r => {
+  r.addEventListener('change', () => {
+    const isDirect = document.querySelector('input[name="incomeMode"]:checked').value === 'direct';
+    document.getElementById('incomeDirectFields').style.display = isDirect ? 'block' : 'none';
+    document.getElementById('incomeEstimateFields').style.display = isDirect ? 'none' : 'block';
+  });
+});
+
+function yen(n) { return Math.round(n).toLocaleString('ja-JP') + '円'; }
+function num(id) { return parseFloat(document.getElementById(id).value) || 0; }
+
+function calcNini() {
+  const age = num('age');
+  const monthlyIncome = num('monthlyIncome');
+  const standardGrade = lookupStandardGrade(monthlyIncome);
+  const cap = num('niniCap');
+  const base = Math.min(standardGrade, cap || Infinity);
+  const isKaigo = age >= 40 && age < 65;
+
+  const hoken = Math.round(base * num('niniHokenRate') / 100);
+  const kaigo = isKaigo ? Math.round(base * num('niniKaigoRate') / 100) : 0;
+  const shien = Math.round(base * num('niniShienRate') / 100);
+
+  return { standardGrade, base, hoken, kaigo, shien, total: hoken + kaigo + shien, isKaigo };
+}
+
+function calcKokuhoDivision(divIds, incomeBase, memberCount, fixedAssetTax, assetRate, addAsset) {
+  const rate = num(divIds.rate);
+  const kintou = num(divIds.kintou);
+  const byoudou = num(divIds.byoudou);
+  const limit = num(divIds.limit) || Infinity;
+  const shotokuwari = Math.max(0, incomeBase) * rate / 100;
+  const kintouwari = kintou * memberCount;
+  const shisanwari = addAsset ? (fixedAssetTax * assetRate / 100) : 0;
+  const raw = shotokuwari + kintouwari + byoudou + shisanwari;
+  return Math.min(Math.round(raw), limit);
+}
+
+function calcKokuho() {
+  const mode = document.querySelector('input[name="incomeMode"]:checked').value;
+  let kyuyoShotoku;
+  if (mode === 'direct') {
+    kyuyoShotoku = num('incomeDirect');
+  } else {
+    const annual = num('monthlyIncome') * 12 + num('incomeBonusExtra');
+    kyuyoShotoku = estimateKyuyoShotoku(annual);
+  }
+  const kiso = num('kisoKoujo');
+  const incomeBase = Math.max(0, kyuyoShotoku - kiso);
+  const householdCount = Math.max(1, num('householdCount'));
+  // ご本人が40〜64歳なら国保でも介護分（第2号）の対象になるため、最低1人として扱う
+  const age = num('age');
+  let kaigoCount = num('kaigoCount');
+  if (age >= 40 && age < 65 && kaigoCount < 1) {
+    kaigoCount = 1;
+    document.getElementById('kaigoCount').value = 1;
+  }
+  const fixedAssetTax = num('fixedAssetTax');
+  const assetRate = num('assetRate');
+
+  const iryo = calcKokuhoDivision(DIV_FIELD_IDS.iryo, incomeBase, householdCount, fixedAssetTax, assetRate, true);
+  const shien = calcKokuhoDivision(DIV_FIELD_IDS.shien, incomeBase, householdCount, fixedAssetTax, assetRate, false);
+  const kaigo = kaigoCount > 0 ? calcKokuhoDivision(DIV_FIELD_IDS.kaigo, incomeBase, kaigoCount, fixedAssetTax, assetRate, false) : 0;
+  const kodomo = calcKokuhoDivision(DIV_FIELD_IDS.kodomo, incomeBase, householdCount, fixedAssetTax, assetRate, false);
+
+  const annualTotal = iryo + shien + kaigo + kodomo;
+  return { kyuyoShotoku, incomeBase, iryo, shien, kaigo, kodomo, annualTotal, monthly: Math.round(annualTotal / 12) };
+}
+
+function renderBar(label, val, max) {
+  const pct = max > 0 ? Math.min(100, val / max * 100) : 0;
+  return `<div class="bar-row"><div class="bar-label">${label}</div>
+    <div class="bar-track"><div class="bar-fill" style="width:${pct}%"></div></div>
+    <div class="bar-val">${yen(val)}</div></div>`;
+}
+
+document.getElementById('calc-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const nini = calcNini();
+  const kokuho = calcKokuho();
+
+  const cheaper = nini.total <= kokuho.monthly ? 'nini' : 'kokuho';
+  const diff = Math.abs(nini.total - kokuho.monthly);
+
+  const compareGrid = document.getElementById('compareGrid');
+  compareGrid.innerHTML = `
+    <div class="rc ${cheaper === 'nini' ? 'win' : ''}">
+      <div class="rc-label">任意継続</div>
+      <div class="rc-amt">${nini.total.toLocaleString('ja-JP')}<small>円/月</small></div>
+      ${cheaper === 'nini' ? `<div class="rc-badge">月 ${diff.toLocaleString('ja-JP')}円 お得</div>` : ''}
+    </div>
+    <div class="rc ${cheaper === 'kokuho' ? 'win' : ''}">
+      <div class="rc-label">国民健康保険</div>
+      <div class="rc-amt">${kokuho.monthly.toLocaleString('ja-JP')}<small>円/月</small></div>
+      ${cheaper === 'kokuho' ? `<div class="rc-badge">月 ${diff.toLocaleString('ja-JP')}円 お得</div>` : ''}
+    </div>`;
+
+  const max = Math.max(nini.total, kokuho.monthly, 1);
+  document.getElementById('barChart').innerHTML =
+    renderBar('任意継続', nini.total, max) + renderBar('国民健康保険', kokuho.monthly, max);
+
+  document.getElementById('niniTable').innerHTML = `
+    <tr><th>項目</th><th>金額</th></tr>
+    <tr><td>採用する標準報酬月額</td><td>${yen(nini.base)}</td></tr>
+    <tr><td>健康保険料</td><td>${yen(nini.hoken)}</td></tr>
+    <tr><td>介護保険料${nini.isKaigo ? '' : '（対象外）'}</td><td>${yen(nini.kaigo)}</td></tr>
+    <tr><td>子ども・子育て支援金</td><td>${yen(nini.shien)}</td></tr>
+    <tr class="total"><td>合計（月額）</td><td>${yen(nini.total)}</td></tr>`;
+
+  document.getElementById('kokuhoTable').innerHTML = `
+    <tr><th>項目</th><th>金額</th></tr>
+    <tr><td>算定基礎所得（給与所得−基礎控除）</td><td>${yen(kokuho.incomeBase)}</td></tr>
+    <tr><td>医療分（年額）</td><td>${yen(kokuho.iryo)}</td></tr>
+    <tr><td>後期高齢者支援金分（年額）</td><td>${yen(kokuho.shien)}</td></tr>
+    <tr><td>介護納付金分（年額）</td><td>${yen(kokuho.kaigo)}</td></tr>
+    <tr><td>子ども・子育て支援金分（年額）</td><td>${yen(kokuho.kodomo)}</td></tr>
+    <tr><td>年額合計</td><td>${yen(kokuho.annualTotal)}</td></tr>
+    <tr class="total"><td>月額換算（年額÷12）</td><td>${yen(kokuho.monthly)}</td></tr>`;
+
+  const result = document.getElementById('result');
+  result.classList.add('show');
+  result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+</script>
+</body>
+</html>
