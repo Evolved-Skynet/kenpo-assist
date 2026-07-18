@@ -1,5 +1,7 @@
-fastapi
-uvicorn[standard]
-pydantic
-python-dotenv
-cryptography
+# 配布バイナリの再現性のためバージョンを固定。
+# 更新は動作確認（README「リリース前チェックリスト」）とセットで行うこと。
+fastapi==0.136.1
+uvicorn[standard]==0.46.0
+pydantic==2.12.5
+python-dotenv==1.2.2
+cryptography==43.0.0

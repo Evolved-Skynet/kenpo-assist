@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; form-action 'self'; base-uri 'none'; object-src 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>ケンポアシスト｜健保事務のAI相棒</title>
 <style>
@@ -747,6 +748,22 @@
 </div>
 
 <script>
+// サーバーが配信時に埋め込むAPIトークン。全fetchに自動付与し、
+// 画面（/）を経由しないローカルAPIアクセスを拒否できるようにする。
+const API_TOKEN = '__API_TOKEN__';
+const _origFetch = window.fetch.bind(window);
+window.fetch = (url, opts = {}) => {
+  opts.headers = Object.assign({ 'X-Api-Token': API_TOKEN }, opts.headers || {});
+  return _origFetch(url, opts);
+};
+
+// ユーザー入力・AI出力をHTMLへ埋め込む際の共通エスケープ（XSS対策）
+function esc(s) {
+  return String(s ?? '')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
 let currentId = null;
 let chatHistory = [];
 let currentInquiry = { content: '', category: '', ai_draft: '' };
@@ -813,7 +830,7 @@ function showPage(page) {
 
 function showAlert(msg, type='success') {
   const el = document.getElementById('alert-area');
-  el.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+  el.innerHTML = `<div class="alert alert-${type}">${esc(msg)}</div>`;
   setTimeout(() => el.innerHTML = '', 4000);
 }
 
@@ -1075,11 +1092,11 @@ async function loadList() {
       </tr></thead>
       <tbody>
         ${items.map(i => `<tr>
-          <td style="white-space:nowrap;color:#888">${i.created_at}</td>
-          <td>${i.category||'—'}</td>
-          <td style="max-width:280px">${i.content.substring(0,60)}${i.content.length>60?'...':''}</td>
-          <td>${i.staff||'—'}</td>
-          <td><span class="badge badge-${i.status}">${i.status}</span></td>
+          <td style="white-space:nowrap;color:#888">${esc(i.created_at)}</td>
+          <td>${esc(i.category)||'—'}</td>
+          <td style="max-width:280px">${esc(i.content.substring(0,60))}${i.content.length>60?'...':''}</td>
+          <td>${esc(i.staff)||'—'}</td>
+          <td><span class="badge badge-${esc(i.status)}">${esc(i.status)}</span></td>
           <td><button class="btn btn-secondary btn-sm" onclick="openModal(${i.id})">詳細</button></td>
         </tr>`).join('')}
       </tbody>
@@ -1090,14 +1107,14 @@ async function loadList() {
     <div class="sp-inquiry-card" onclick="openModal(${i.id})">
       <div class="sp-meta">
         <div class="sp-tags">
-          <span class="badge badge-${i.status}">${i.status}</span>
-          ${i.category ? `<span class="sp-category">${i.category}</span>` : ''}
+          <span class="badge badge-${esc(i.status)}">${esc(i.status)}</span>
+          ${i.category ? `<span class="sp-category">${esc(i.category)}</span>` : ''}
         </div>
-        <span class="sp-date">${i.created_at}</span>
+        <span class="sp-date">${esc(i.created_at)}</span>
       </div>
-      <div class="sp-excerpt">${i.content.substring(0,80)}${i.content.length>80?'...':''}</div>
+      <div class="sp-excerpt">${esc(i.content.substring(0,80))}${i.content.length>80?'...':''}</div>
       <div class="sp-footer">
-        <span style="font-size:12px;color:#aaa">担当: ${i.staff||'—'}</span>
+        <span style="font-size:12px;color:#aaa">担当: ${esc(i.staff)||'—'}</span>
         <span style="font-size:12px;color:#1a5fa8;font-weight:600">詳細 ›</span>
       </div>
     </div>`).join('');
@@ -1157,7 +1174,7 @@ async function openModal(id) {
         ${m.role==='user'
           ? 'background:#1a5fa8;color:white;align-self:flex-end;border-bottom-right-radius:3px;margin-left:auto'
           : 'background:white;border:1px solid #d0e0f0;align-self:flex-start;border-bottom-left-radius:3px'}
-      ">${m.content.replace(/</g,'&lt;')}</div>`).join('');
+      ">${esc(m.content)}</div>`).join('');
     chatRow.style.display = 'flex';
     finalRow.style.flex = '1';
     chatRow.style.flex = '1';

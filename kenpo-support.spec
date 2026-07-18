@@ -40,7 +40,9 @@ exe = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    # UPX圧縮はPyInstaller製exeのウイルス誤検知（SmartScreen/AV警告）を誘発しやすいため無効化。
+    # ファイルサイズより配布先での信頼性を優先する。
+    upx=False,
     runtime_tmpdir=None,
     console=True,          # 起動状況の表示と Ctrl+C 終了のためコンソールを表示
     disable_windowed_traceback=False,

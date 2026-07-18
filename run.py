@@ -27,6 +27,10 @@ def _open_browser():
 
 
 def main():
+    if HOST not in ("127.0.0.1", "localhost", "::1"):
+        print(f"⚠️ 警告: HOST={HOST} が設定されています。このアプリを他のPCから見える")
+        print("   アドレスで公開すると、問い合わせデータ（個人情報）が同じネットワークの")
+        print("   第三者から閲覧できるおそれがあります。通常は HOST を設定しないでください。")
     # サーバー起動直後にブラウザを開く（起動待ちのため少し遅延）
     threading.Timer(1.5, _open_browser).start()
     print(f"ケンポアシストを起動します → http://{HOST}:{PORT}/")
